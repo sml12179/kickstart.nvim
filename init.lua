@@ -744,6 +744,7 @@ do
     -- But for many setups, the LSP (`rust_analyzer`) will work just fine
     -- rust_analyzer = {},
 
+    texlab = {}, -- LaTeX: completion for \ref/\cite/commands, diagnostics
     stylua = {}, -- Used to format Lua code
 
     -- Special Lua Config, as recommended by neovim help docs
@@ -984,6 +985,8 @@ do
 
       local language = vim.treesitter.language.get_lang(filetype)
       if not language then return end
+      -- VimTeX does its own LaTeX highlighting; treesitter would override it (see :help vimtex-faq-treesitter)
+      if language == 'latex' then return end
 
       local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
 
@@ -1024,7 +1027,7 @@ do
   -- NOTE: You can add your own plugins, configuration, etc. in `lua/custom/plugins/*.lua`.
   --
   -- For independent modules, uncomment the convenience loader:
-  -- require 'custom.plugins'
+  require 'custom.plugins'
   --
   -- `custom.plugins` automatically loads files from that directory, but their
   -- order is unspecified. If plugins depend on each other, keep them in the same
